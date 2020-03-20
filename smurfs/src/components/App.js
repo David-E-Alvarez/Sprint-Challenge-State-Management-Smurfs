@@ -1,16 +1,36 @@
-import React, { Component } from "react";
+import React, { Component, useState, useEffect } from "react";
+import axios from "axios";
 import "./App.css";
-class App extends Component {
-  render() {
+import {smurfContext} from '../contexts/smurfContext';
+import Smurfs from "./Smurfs";
+const App = () =>{
+    const [smurfData, setSmurfData] = useState([]);
+    useEffect(() => {
+      axios
+      .get("http://localhost:3333/smurfs")
+      .then(res => {
+        console.log("res.data", res.data)
+        setSmurfData(res.data);
+      })
+    },[])
     return (
       <div className="App">
-        <h1>SMURFS! 2.0 W/ Redux</h1>
-        <div>Welcome to your state management version of Smurfs!</div>
-        <div>Start inside of your `src/index.js` file!</div>
-        <div>Have fun!</div>
+        <h1>The Smurfs</h1>
+        <form>
+                <label htmlFor="name">Smurf name: </label>
+                <input id="name" type="text" placeholder="add smurf" name="name"/><br/>
+                <label htmlFor="age">Age: </label>
+                <input id="age" type="text" placeholder="add age" name="email"/><br/>
+                <label htmlFor="height">Height: </label>
+                <input id="height" type="text" placeholder="add height" name="role"/><br/>
+                <button type="submit">Add Smurf</button>
+            </form>
+        <smurfContext.Provider value={{smurfData}}>
+            <Smurfs/>
+        </smurfContext.Provider>
       </div>
     );
   }
-}
+
 
 export default App;
